@@ -49,10 +49,13 @@ var UnitStateAdditionEventCommand = defineObject(BaseEventCommand,
 	},
 	
 	mainEventCommand: function() {
-		this._isHit = StateControl.checkStateInvocation(this._launchUnit, this._targetUnit, root.getEventCommandObject()) !== null;
-		
 		if (this._isHit) {
 			StateControl.arrangeState(this._targetUnit, this._targetState, this._increaseType);
+		}
+		
+		if (this._easyMapUnit !== null) {
+			this._targetUnit.setInvisible(false);
+			this._easyMapUnit = null;
 		}
 	},
 	
@@ -64,6 +67,13 @@ var UnitStateAdditionEventCommand = defineObject(BaseEventCommand,
 		this._increaseType = eventCommandData.getIncreaseValue();
 		this._targetState = eventCommandData.getStateInvocation().getState();
 		this._dynamicAnime = createObject(DynamicAnime);
+		
+		if (this._targetUnit === null || this._targetState === null) {
+			this._isHit = false;
+		}
+		else {
+			this._isHit = StateControl.checkStateInvocation(this._launchUnit, this._targetUnit, root.getEventCommandObject()) !== null;
+		}
 	},
 	
 	_checkEventCommand: function() {
@@ -89,8 +99,8 @@ var UnitStateAdditionEventCommand = defineObject(BaseEventCommand,
 	
 	_moveTop: function() {
 		if (this._dynamicAnime.moveDynamicAnime() !== MoveResult.CONTINUE) {
-			this.mainEventCommand();
 			if (this._isHit) {
+				this.mainEventCommand();
 				return MoveResult.END;
 			}
 			
@@ -110,6 +120,7 @@ var UnitStateAdditionEventCommand = defineObject(BaseEventCommand,
 		this._easyMapUnit.moveMapUnit();
 		if (this._easyMapUnit.isActionLast()) {
 			this._targetUnit.setInvisible(false);
+			this._easyMapUnit = null;
 			return MoveResult.END;
 		}
 		

@@ -366,7 +366,12 @@ var ShopLayoutScreen = defineObject(BaseScreen,
 		}
 		else if (result === BuyQuestionResult.FORCESTOCK) {
 			this._startSale(true, true);
-			this._startMessage(this._shopMessageTable.ForceStock, ShopLayoutMode.BUY);
+			if (this._shopItemArray.length !== 0) {
+				this._startMessage(this._shopMessageTable.ForceStock, ShopLayoutMode.BUY);
+			}
+			else {
+				this._startMessage(this._shopMessageTable.ForceStock, ShopLayoutMode.BUYSELLSELECT);
+			}
 		}
 		
 		return MoveResult.CONTINUE;

@@ -418,7 +418,7 @@ MapParts.UnitInfo = defineObject(BaseMapParts,
 		var yMin = yBase;
 		var yMax = root.getGameAreaHeight() - this._getWindowHeight() - yBase;
 		
-		return y > d ? yMin: yMax;
+		return y > d ? yMin : yMax;
 	},
 	
 	_getWindowWidth: function() {
